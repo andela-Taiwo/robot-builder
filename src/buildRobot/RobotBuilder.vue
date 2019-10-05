@@ -58,6 +58,7 @@
 
 <script>
 import availableParts from '../data/parts';
+import CreatedHookMixin from './mixinHooks';
 
 function getNextValidIndex(index, length) {
   const nextIndex = index + 1;
@@ -83,6 +84,7 @@ export default {
       cart: [],
     };
   },
+  mixins: [CreatedHookMixin],
   computed: {
     selectedRobot() {
       return {
