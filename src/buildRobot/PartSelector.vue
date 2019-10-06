@@ -1,7 +1,7 @@
 <template>
   <div class="part" :class='position'>
     <img :src="selectedPart.src" title="arm"/>
-    <button @click="selectPreviousPart()" class="prev-selector"></button>
+    <button @click="selectPreviousPart()" class="prev-selector" ></button>
     <button @click="selectNextPart()" class="next-selector"></button>
     <span class="sale" v-show="selectedPart.onSale">Sale!</span>
   </div>
@@ -20,9 +20,27 @@ function getNextValidIndex(index, length) {
 }
 
 export default {
-  props: ['parts', 'position'],
+  props: {
+    parts: {
+      required: true,
+      type: Array,
+    },
+    position: {
+      required: true,
+      type: String,
+      validator(value) {
+        return ['left', 'top', 'bottom', 'center', 'right'].includes(value);
+      },
+    },
+  },
   data() {
     return { selectedPartIndex: 0 };
+  },
+  created() {
+    this.emitSelectedPart();
+  },
+  updated() {
+    this.emitSelectedPart();
   },
   computed: {
     selectedPart() {
@@ -30,6 +48,9 @@ export default {
     },
   },
   methods: {
+    emitSelectedPart() {
+      this.$emit('partSelected', this.selectedPart);
+    },
     selectNextPart() {
       this.selectedPartIndex = getNextValidIndex(
         this.selectedPartIndex,
